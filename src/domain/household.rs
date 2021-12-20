@@ -1,4 +1,3 @@
-#![allow(dead_code)]
 pub struct Household {
     pub id: Option<i32>,
     pub name: String,
@@ -25,7 +24,7 @@ mod tests {
     use super::*;
 
     #[test]
-    fn given_a_name_when_creating_a_new_household_then_a_household_with_name_and_none_id_should_be_returned() {
+    fn household_from_string() {
         // GIVEN
         let household_name = String::from("A household");
         // WHEN
@@ -36,7 +35,7 @@ mod tests {
     }
 
     #[test]
-    fn given_an_id_and_a_name_when_creating_a_new_household_then_a_househould_with_the_same_id_and_name_should_be_returned() {
+    fn household_from_id_and_string() {
         // GIVEN
         let household_id = 1;
         let household_name = String::from("A household");
@@ -45,6 +44,5 @@ mod tests {
         // THEN
         assert_eq!(new_household.id, Some(household_id));
         assert_eq!(new_household.name, household_name);
-
     }
 }
