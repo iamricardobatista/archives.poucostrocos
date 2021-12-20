@@ -5,14 +5,14 @@ pub struct Household {
 }
 
 impl Household {
-    pub fn from(household_name: String) -> Household {
+    pub fn from(household_name: String) -> Self {
         Household {
             id: None,
             name: household_name,
         }
     }
 
-    pub fn from_id_and_name(id: i32, household_name: String) -> Household {
+    pub fn from_id_and_name(id: i32, household_name: String) -> Self {
         Household {
             id: Some(id),
             name: household_name,
