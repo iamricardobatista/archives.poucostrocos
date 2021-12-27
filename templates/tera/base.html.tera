@@ -11,8 +11,22 @@
     <link rel="stylesheet" href="/static/css/compiled.css">
 </head>
 <body>
-  {% block content %}{% endblock content %}
-  <script async="true" src="/static/js/base/index.js"></script>
+  <header>
+    <nav class="flex flex-row sticky top-0 bg-orange-100 p-2 pl-6 pr-6">
+      <div class="basis-1/4">
+        <a href="/" class="md:text-xl sm:text-sm">
+          <img class="inline" src="/static/favicon/favicon-32x32.png" alt="Poucos trocos logos"
+            width="24" height="24"> Poucos Trocos
+        </a>
+      </div>
+      <div class="basis-1/2"></div>
+      <div class="basis-1/4"></div>
+    </nav>
+  </header>
+  <body>
+    {% block content %}{% endblock content %}
+  </body>
+  <footer></footer>
   {% block javascript%}{% endblock javascript %}
 </body>
 </html>
