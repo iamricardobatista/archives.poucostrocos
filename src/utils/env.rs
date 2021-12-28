@@ -54,3 +54,39 @@ pub fn get(env: String) -> String {
         Err(error) => panic!("{}", error),
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use crate::utils::env;
+
+    #[test]
+    fn get_or_else_existing_env_var() {
+        std::env::set_var("example_env", "example_value");
+
+        let result = env::get_or_else(String::from("example_env"), String::from("default"));
+
+        std::env::remove_var("example_env");
+        assert_eq!(result, "example_value")
+    }
+
+    #[test]
+    fn get_or_else_default() {
+        let result = env::get_or_else(String::from("other_example_env"), String::from("default"));
+        assert_eq!(result, "default")
+    }
+
+    #[test]
+    fn get_existing_var() {
+        std::env::set_var("example_env", "example_value");
+
+        let result = env::get(String::from("example_env"));
+        std::env::remove_var("example_env");
+        assert_eq!(result, "example_value")
+    }
+
+    #[test]
+    #[should_panic]
+    fn get_panic() {
+        env::get(String::from("other_example_env"));
+    }
+}
