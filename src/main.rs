@@ -22,6 +22,7 @@ fn rocket() -> _ {
     rocket::build()
         .manage(google_api_secrets)
         .mount("/", routes![home::index])
+        .mount("/login", routes![login::index])
         .mount("/static", FileServer::from(static_dir))
         .attach(Template::fairing())
 }
