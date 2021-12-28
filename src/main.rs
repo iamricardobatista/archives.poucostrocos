@@ -4,13 +4,12 @@
 extern crate rocket;
 
 mod controller;
-mod domain;
 mod utils;
 
-use controller::home;
+use controller::*;
 use rocket::fs::{relative, FileServer};
 use rocket_dyn_templates::Template;
-use utils::env;
+use utils::{env, googleapi};
 
 #[launch]
 fn rocket() -> _ {
@@ -19,7 +18,9 @@ fn rocket() -> _ {
         String::from(relative!("static")),
     );
 
+    let google_api_secrets = googleapi::load();
     rocket::build()
+        .manage(google_api_secrets)
         .mount("/", routes![home::index])
         .mount("/static", FileServer::from(static_dir))
         .attach(Template::fairing())
