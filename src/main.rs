@@ -5,8 +5,9 @@ extern crate rocket;
 
 mod controller;
 mod utils;
+mod domain;
 
-use controller::*;
+use controller::{home, auth, login};
 use rocket::fs::{relative, FileServer};
 use rocket_dyn_templates::Template;
 use utils::{env, googleapi};
@@ -23,6 +24,7 @@ fn rocket() -> _ {
         .manage(google_api_secrets)
         .mount("/", routes![home::index])
         .mount("/login", routes![login::index])
+        .mount("/auth", routes![auth::google_auth])
         .mount("/static", FileServer::from(static_dir))
         .attach(Template::fairing())
 }
