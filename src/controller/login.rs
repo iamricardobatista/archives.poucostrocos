@@ -32,6 +32,7 @@ mod tests {
             response_type: String::from("response_type"),
             scope: String::from("scope"),
             access_type: String::from("access_type"),
+            authorization_type: String::from("authorization_type"),
         };
 
         let state = State::from(&google_api_secrets);

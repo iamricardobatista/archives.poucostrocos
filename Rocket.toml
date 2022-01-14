@@ -1,2 +1,4 @@
 [default]
 template_dir = "templates"
+[global.databases]
+persistent_storage = { url = "postgres://postgres:example@localhost/poucostrocos" }
