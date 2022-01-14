@@ -10,7 +10,14 @@ mod domain;
 use controller::{home, auth, login};
 use rocket::fs::{relative, FileServer};
 use rocket_dyn_templates::Template;
-use utils::{env, googleapi};
+use utils::env;
+use utils::googleapi;
+
+use rocket_sync_db_pools::database;
+use rocket_sync_db_pools::postgres;
+
+#[database("persistent_storage")]
+struct Db(postgres::Client);
 
 #[launch]
 fn rocket() -> _ {
@@ -27,4 +34,5 @@ fn rocket() -> _ {
         .mount("/auth", routes![auth::google_auth])
         .mount("/static", FileServer::from(static_dir))
         .attach(Template::fairing())
+        .attach(Db::fairing())
 }
