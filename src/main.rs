@@ -4,20 +4,14 @@
 extern crate rocket;
 
 mod controller;
-mod utils;
 mod domain;
+mod utils;
 
-use controller::{home, auth, login};
+use crate::utils::database::Db;
+use controller::{auth, home, login};
 use rocket::fs::{relative, FileServer};
 use rocket_dyn_templates::Template;
-use utils::env;
-use utils::googleapi;
-
-use rocket_sync_db_pools::database;
-use rocket_sync_db_pools::postgres;
-
-#[database("persistent_storage")]
-struct Db(postgres::Client);
+use utils::{env, googleapi};
 
 #[launch]
 fn rocket() -> _ {
