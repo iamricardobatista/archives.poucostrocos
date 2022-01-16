@@ -1,3 +1,5 @@
+use rocket::http::Cookie;
+use rocket::http::CookieJar;
 use rocket::response::Redirect;
 use rocket::State;
 
@@ -9,6 +11,7 @@ use crate::Db;
 
 #[get("/?<google_auth_response..>")]
 pub async fn google_auth(
+    cookies: &CookieJar<'_>,
     conn: Db,
     google_api_secrets: &State<GoogleApiSecrets>,
     google_auth_response: GoogleAuthResponse,
@@ -17,24 +20,35 @@ pub async fn google_auth(
     match google_user {
         Ok(google_user) => {
             let user = User::from_email(google_user.email);
-            load_user(&conn, &user).await
+            load_user(&cookies, &conn, &user).await
         }
         Err(_) => Redirect::to(uri!("/errors/user?status=404")),
     }
 }
 
-async fn load_user(conn: &Db, user: &User) -> Redirect {
+async fn load_user(cookies: &CookieJar<'_>, conn: &Db, user: &User) -> Redirect {
     let result = user.load(&conn).await;
     match result {
-        Some(user) => todo!("{:?}", user),
-        None => create_user(&conn, &user).await
+        Some(user) => sign_in_user(&cookies, &user),
+        None => create_user(&cookies, &conn, &user).await,
     }
 }
 
-async fn create_user(conn: &Db, user: &User) -> Redirect {
+async fn create_user(cookies: &CookieJar<'_>, conn: &Db, user: &User) -> Redirect {
     let result = user.create(&conn).await;
     match result {
-       Some(user) => todo!("{:?}", user),
-       None => Redirect::to(uri!("/errors/user?status=404")),
+        Some(user) => sign_in_user(&cookies, &user),
+        None => Redirect::to(uri!("/errors/user?status=404")),
     }
+}
+
+fn sign_in_user(cookies: &CookieJar<'_>, user: &User) -> Redirect {
+    let cookie = Cookie::build("poucostrocos", user.email.clone())
+        .path("/")
+        .secure(true)
+        .http_only(true)
+        .finish();
+
+    cookies.add_private(cookie);
+    Redirect::to(uri!("/"))
 }
