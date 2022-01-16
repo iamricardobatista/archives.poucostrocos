@@ -26,6 +26,7 @@ fn rocket() -> _ {
         .mount("/", routes![home::index])
         .mount("/login", routes![login::index])
         .mount("/auth", routes![auth::google_auth])
+        .mount("/auth", routes![auth::logout])
         .mount("/static", FileServer::from(static_dir))
         .attach(Template::fairing())
         .attach(Db::fairing())

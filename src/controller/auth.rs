@@ -26,6 +26,12 @@ pub async fn google_auth(
     }
 }
 
+#[get("/logout")]
+pub fn logout(cookies: &CookieJar<'_>) -> Redirect {
+    cookies.remove_private(Cookie::named("poucostrocos"));
+    Redirect::to(uri!("/"))
+}
+
 async fn load_user(cookies: &CookieJar<'_>, conn: &Db, user: &User) -> Redirect {
     let result = user.load(&conn).await;
     match result {
